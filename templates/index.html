@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="current_job"></p>
+    <img src="http://192.168.0.120:8080/?action=stream" alt="http://192.168.0.120:8080/?action=stream">
+
+
+    <script>
+       
+        let server_url = "http://127.0.0.1:5000/";
+        
+        async function call_get_current_job() {
+            //get the reponse from the server and display it
+
+            let url  = server_url + "/call_get_current_job";
+            let response = fetch(url);
+            let data = await (await response).text();
+            document.getElementById("current_job").innerHTML = data;
+        }
+
+        function api_call_loop() {
+            //call all apis every second
+
+            setTimeout(api_call_loop, 1000)
+            console.log("test");
+
+            call_get_current_job();
+        }
+
+        api_call_loop();
+    </script>
+</body>
+</html>
