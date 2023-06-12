@@ -4,10 +4,24 @@ from api_call import *
 app = Flask(__name__)
 
 
-@app.route("/call_get_current_job")
-def call_get_current_job():
-    '''This function will return the current job of the printer'''
-    return str(get_current_job())
+@app.route("/call_get_current_time")
+def call_get_current_time():
+    '''This function will return the current time of the printer in utc'''
+    return str(get_current_time())
+
+
+@app.route("/call_get_printing_time_total")
+def call_get_printing_time_total():
+    '''This function will return the estimated time to complete the print job'''
+    return str(get_printing_time_total())
+
+@app.route("/call_get_printing_time_elapsed")
+def call_get_printing_time_elapsed():
+    '''This function will return the elapsed time of the print job'''
+    return str(get_printing_time_elapsed())
+
+
+
 
 @app.route("/")
 def home():

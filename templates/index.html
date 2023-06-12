@@ -6,7 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <p id="current_job"></p>
+    <p id="current_time"></p>
+    <p id="time_elapsed"></p>
+    <p id="time_total"></p>
     <img src="http://192.168.0.120:8080/?action=stream" alt="http://192.168.0.120:8080/?action=stream">
 
 
@@ -14,13 +16,28 @@
        
         let server_url = "http://127.0.0.1:5000/";
         
-        async function call_get_current_job() {
+        async function call_get_current_time() {
             //get the reponse from the server and display it
-
-            let url  = server_url + "/call_get_current_job";
+            let url  = server_url + "/call_get_current_time";
             let response = fetch(url);
             let data = await (await response).text();
-            document.getElementById("current_job").innerHTML = data;
+            document.getElementById("current_time").innerHTML = data;
+        }
+
+        async function call_get_time_total() {
+            //get the reponse from the server and display it
+            let url  = server_url + "/call_get_printing_time_total";
+            let response = fetch(url);
+            let data = await (await response).text();
+            document.getElementById("time_total").innerHTML = data;
+        }
+
+        async function call_get_time_elapsed() {
+            //get the reponse from the server and display it
+            let url  = server_url + "/call_get_printing_time_elapsed";
+            let response = fetch(url);
+            let data = await (await response).text();
+            document.getElementById("time_elapsed").innerHTML = data;
         }
 
         function api_call_loop() {
@@ -29,7 +46,9 @@
             setTimeout(api_call_loop, 1000)
             console.log("test");
 
-            call_get_current_job();
+            call_get_current_time();
+            call_get_time_total();
+            call_get_time_elapsed();
         }
 
         api_call_loop();
