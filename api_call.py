@@ -35,3 +35,12 @@ def get_printing_time_elapsed():
     printer_time_elapsed_request = requests.get(url, headers=header)
     
     return printer_time_elapsed_request.json()
+
+def get_printing_progress():
+    '''This function will return the progress of the print job'''
+    url = "http://192.168.0.120/api/v1/print_job/progress"
+    header = {"Accept": "application/json"}
+    
+    printer_progress_request = requests.get(url, headers=header)
+    
+    return printer_progress_request.json()
