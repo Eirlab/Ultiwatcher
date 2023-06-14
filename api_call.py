@@ -46,3 +46,12 @@ def get_printing_progress():
     printer_progress_request = requests.get(url, headers=header)
     
     return printer_progress_request.json()
+
+def get_printer_name():
+    '''This function will return the name of the printer'''
+    url = "http://192.168.0.120/api/v1/system/variant"
+    header = {"Accept": "application/json"}
+    
+    printer_name_request = requests.get(url, headers=header)
+    
+    return printer_name_request.json()

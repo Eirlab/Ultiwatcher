@@ -9,6 +9,10 @@
     <p id="current_time"></p>
     <p id="time_elapsed"></p>
     <p id="time_total"></p>
+    <p id="printing_progress"></p>
+    <p id="printer_name"></p>
+    <p id= "printer_status"></p>
+    
     <img src="http://192.168.0.120:8080/?action=stream" alt="http://192.168.0.120:8080/?action=stream">
 
 
@@ -16,48 +20,27 @@
        
         let server_url = "http://127.0.0.1:5000/";
         
-        async function call_get_current_time() {
+        async function call_get_api(api_to_call) {
             //get the reponse from the server and display it
-            let url  = server_url + "/call_get_current_time";
+            let url  = server_url +'/call_'+ api_to_call;
             let response = fetch(url);
             let data = await (await response).text();
-            document.getElementById("current_time").innerHTML = data;
+            divId = api_to_call.replace("get_", "");
+            document.getElementById(divId).innerHTML = data;
         }
-
-        async function call_get_time_total() {
-            //get the reponse from the server and display it
-            let url  = server_url + "/call_get_printing_time_total";
-            let response = fetch(url);
-            let data = await (await response).text();
-            document.getElementById("time_total").innerHTML = data;
-        }
-
-        async function call_get_time_elapsed() {
-            //get the reponse from the server and display it
-            let url  = server_url + "/call_get_printing_time_elapsed";
-            let response = fetch(url);
-            let data = await (await response).text();
-            document.getElementById("time_elapsed").innerHTML = data;
-        }
-
-        async function call_get_printing_progress() {
-            //get the reponse from the server and display it
-            let url  = server_url + "/call_get_printing_progress";
-            let response = fetch(url);
-            let data = await (await response).text();
-            document.getElementById("printing_progress").innerHTML = data;
-        }
-
+        
         function api_call_loop() {
             //call all apis every second
 
-            setTimeout(api_call_loop, 1000)
-            console.log("test");
+            setTimeout(api_call_loop, 3000)
 
-            call_get_current_time();
-            call_get_time_total();
-            call_get_time_elapsed();
-            call_get_printing_progress();
+            call_get_api("get_current_time");
+            call_get_api("get_printing_time_total");
+            call_get_api("get_printing_time_elapsed");
+            call_get_api("get_printing_progress");
+            call_get_api("get_printer_name");
+            call_get_api("get_printer_status");
+
         }
 
         api_call_loop();
