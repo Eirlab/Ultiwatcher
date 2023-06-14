@@ -4,16 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 </head>
 <body>
-    <p id="current_time"></p>
-    <p id="time_elapsed"></p>
-    <p id="time_total"></p>
-    <p id="printing_progress"></p>
-    <p id="printer_name"></p>
-    <p id= "printer_status"></p>
-    
-    <img src="http://192.168.0.120:8080/?action=stream" alt="http://192.168.0.120:8080/?action=stream">
+
+    <div class="ultiwatcher-container">
+        <div class="printers-container">
+
+            <div class="printer-box-full">
+                <div class="printer-total-prints">0 total prints</div>
+                <div class="printer-box">
+                    <div class="printer-info">
+                        <div class="printer-title">
+                            <span id="printer_name">Printer 1</span>
+                            <span id="printer_extruder_0_id">Extruder 1</span>
+                            <span id="printer_extruder_1_id">Extruder 2</span>
+                        </div>
+                        <div id="printing-status">Printing</div>
+                        <div id="printing-time-remaining">Time remaining: 00:00:00</div>
+                        <div id="print-name">Print name</div>
+                    </div>
+                    <div class="print-preview">
+                    </div>
+                    <div class="printer-temp">
+                        <div id="printer_extruder_0_temperature">Extruder 1</div>
+                        <div id="printer_extruder_1_temperature">Extruder 2</div>
+                        <div id="printer_bed_temperature">Bed</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="printer-box-full">
+                <div class="printer-total-prints">0 total prints</div>
+                <div class="printer-box">
+                    <div class="printer-info">
+                        <div class="printer-title">
+                            <span id="printer_name">Printer 1</span>
+                            <span id="printer_extruder_0_id">Extruder 1</span>
+                            <span id="printer_extruder_1_id">Extruder 2</span>
+                        </div>
+                        <div id="printing-status">Printing</div>
+                        <div id="printing-time-remaining">Time remaining: 00:00:00</div>
+                        <div id="print-name">Print name</div>
+                    </div>
+                    <div class="print-preview">
+                    </div>
+                    <div class="printer-temp">
+                        <div id="printer_extruder_0_temperature">Extruder 1</div>
+                        <div id="printer_extruder_1_temperature">Extruder 2</div>
+                        <div id="printer_bed_temperature">Bed</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="printer-box-full">
+                <div class="printer-total-prints">0 total prints</div>
+                <div class="printer-box">
+                    <div class="printer-info">
+                        <div class="printer-title">
+                            <span id="printer_name">Printer 1</span>
+                            <span id="printer_extruder_0_id">Extruder 1</span>
+                            <span id="printer_extruder_1_id">Extruder 2</span>
+                        </div>
+                        <div id="printing-status">Printing</div>
+                        <div id="printing-time-remaining">Time remaining: 00:00:00</div>
+                        <div id="print-name">Print name</div>
+                    </div>
+                    <div class="print-preview">
+                    </div>
+                    <div class="printer-temp">
+                        <div id="printer_extruder_0_temperature">Extruder 1</div>
+                        <div id="printer_extruder_1_temperature">Extruder 2</div>
+                        <div id="printer_bed_temperature">Bed</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="cam-container">
+            <div class="cam-box">
+                <div class="cam-title">Camera 1</div>
+            </div>
+            <div class="time-box">
+                
+            </div>
+
+        </div>
+
 
 
     <script>
@@ -34,12 +115,12 @@
 
             setTimeout(api_call_loop, 3000)
 
-            call_get_api("get_current_time");
-            call_get_api("get_printing_time_total");
-            call_get_api("get_printing_time_elapsed");
-            call_get_api("get_printing_progress");
-            call_get_api("get_printer_name");
-            call_get_api("get_printer_status");
+            //call_get_api("get_current_time");
+            //call_get_api("get_printing_time_total");
+            //call_get_api("get_printing_time_elapsed");
+            //call_get_api("get_printing_progress");
+            //call_get_api("get_printer_name");
+            //call_get_api("get_printer_status");
 
         }
 
