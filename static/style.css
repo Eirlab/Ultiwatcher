@@ -86,3 +86,19 @@ body {
     border: 3px solid #575757;
     border-radius: 15px;
 }
+
+.cam-stream {
+    display: block;
+    width: 60%;
+    height: auto;
+    margin: 20px auto; 
+}
+
+#container {
+    margin: 20px;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    float: right;
+    
+}
