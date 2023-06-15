@@ -46,26 +46,50 @@
                 <div class="printer-box">
                     <div class="printer-info">
                         <div class="printer-title">
-                            <span id="printer_name" class="printer_0">Printer 1</span>
-                            <span id="printer_extruder_0_id" class="printer_0">Extruder 1</span>
-                            <span id="printer_extruder_1_id" class="printer_0">Extruder 2</span>
-                            <span id="printer_extruder_0_material" class="printer_0">Mat 1</span>
-                            <span id="printer_extruder_1_material" class="printer_0">Mat 2</span>
+                            <span id="printer_name" class="printer_1">Printer 2</span>
+                            <span id="printer_extruder_0_id" class="printer_1">Extruder 1</span>
+                            <span id="printer_extruder_1_id" class="printer_1">Extruder 2</span>
+                            <span id="printer_extruder_0_material" class="printer_1">Mat 1</span>
+                            <span id="printer_extruder_1_material" class="printer_1">Mat 2</span>
                         </div>
-                        <div id="printing_status" class="printer_0">Printing</div>
-                        <div id="printing_time_remaining" class="printer_0">Time remaining: 00:00:00</div>
-                        <div id="print_name" class="printer_0">Print name</div>
+                        <div id="printing_status" class="printer_1">Printing</div>
+                        <div id="printing_time_remaining" class="printer_1">Time remaining: 00:00:00</div>
+                        <div id="print_name" class="printer_1">Print name</div>
                     </div>
                     <div class="print-preview">
                     </div>
                     <div class="printer-temp">
-                        <div id="printer_extruder_0_temperature" class="printer_0">Extruder 1</div>
-                        <div id="printer_extruder_1_temperature"class="printer_0">Extruder 2</div>
-                        <div id="printer_bed_temperature" class="printer_0">Bed</div>
+                        <div id="printer_extruder_0_temperature" class="printer_1">Extruder 1</div>
+                        <div id="printer_extruder_1_temperature"class="printer_1">Extruder 2</div>
+                        <div id="printer_bed_temperature" class="printer_1">Bed</div>
                     </div>
                 </div>
             </div>
 
+            <div class="printer-box-full">
+                <div class="printer_total_prints" >0 total prints</div>
+                <div class="printer-box">
+                    <div class="printer-info">
+                        <div class="printer-title">
+                            <span id="printer_name" class="printer_2">Printer 3</span>
+                            <span id="printer_extruder_0_id" class="printer_2">Extruder 1</span>
+                            <span id="printer_extruder_1_id" class="printer_2">Extruder 2</span>
+                            <span id="printer_extruder_0_material" class="printer_2">Mat 1</span>
+                            <span id="printer_extruder_1_material" class="printer_2">Mat 2</span>
+                        </div>
+                        <div id="printing_status" class="printer_2">Printing</div>
+                        <div id="printing_time_remaining" class="printer_2">Time remaining: 00:00:00</div>
+                        <div id="print_name" class="printer_2">Print name</div>
+                    </div>
+                    <div class="print-preview">
+                    </div>
+                    <div class="printer-temp">
+                        <div id="printer_extruder_0_temperature" class="printer_2">Extruder 1</div>
+                        <div id="printer_extruder_1_temperature"class="printer_2">Extruder 2</div>
+                        <div id="printer_bed_temperature" class="printer_2">Bed</div>
+                    </div>
+                </div>
+            </div>
             
 
 
@@ -73,7 +97,7 @@
 
         <div class="cam-container">
             <div class="cam-box">
-                <img class="cam-stream" src="http://192.168.0.120:8080/?action=stream" alt="">
+                <img class="cam-stream" src="http://192.168.0.119:8080/?action=stream" alt="">
 
             </div>
             <div class="time-box">
@@ -102,12 +126,28 @@
             document.querySelector(".printer_"+printer_n+"#"+divId).innerHTML = data;
         }
 
+        async function post_ip_idx(printer_n) {
+            //post the ip index to the server as form data
+            let url  = server_url +'/switch_ip';
+            let response = fetch(url, {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'ip_idx': printer_n
+                })
+            });
+            let data = await (await response).text();
+
+
+
+        }
+
         async function update_progress_wheel(printer_n){
             //get the reponse from the server and display it
             let url  = server_url +'/call_get_printing_progress';
             let response = fetch(url);
             let data = await (await response).text();
-            bar.animate(data);  // Number from 0.0 to 1.0
+    
+            bar.animate(data );  // Number from 0.0 to 1.0
         }
 
         function extract_response_field(data, field_to_extract) {
@@ -119,9 +159,9 @@
             let url  = server_url +'/call_get_printing_job';
             let response = fetch(url);
             let data = await (await response).text();
-            if (data != "<Response [404]>") {
-                console.log(data);
-            }
+            
+            let print_name = extract_response_field(data, "name");
+            document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
         }
 
         async function call_get_printer_status(printer_n) {
@@ -152,10 +192,11 @@
             setTimeout(api_call_loop_5000, 5000)
 
             //call_get_api("get_current_time", 0);
-            update_progress_wheel(0);
+            //update_progress_wheel(0);
             call_get_api("get_printer_name", 0);
-            call_get_printer_status(0);
-            call_get_printing_job(0);
+            //call_get_printer_status(0);
+
+            //call_get_printing_job(0);
         }
         function api_call_loop() {
             //call all apis every second
@@ -165,8 +206,12 @@
             //call_get_api("get_printing_time_total", 0);
             //call_get_api("get_printing_time_elapsed", 0);
         }
+        
+        post_ip_idx(0);
+
         api_call_loop_5000();
         api_call_loop();
+
 
     </script>
 </body>
