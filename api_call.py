@@ -1,8 +1,7 @@
 import requests
 
-PRINTER_IP = "192.168.0.120"
 
-def get_printer_status():
+def get_printer_status(PRINTER_IP):
     '''This function will return the status of the printer'''   
     url = "http://"+PRINTER_IP+"/api/v1/printer"
     header = {"Accept": "application/json"}
@@ -11,7 +10,7 @@ def get_printer_status():
 
     return printer_status_request.json()
 
-def get_current_time():
+def get_current_time(PRINTER_IP):
     '''This function will return the current job of the printer'''
     url = "http://"+PRINTER_IP+"/api/v1/system/time"
     header = {"Accept": "application/json"}
@@ -20,7 +19,7 @@ def get_current_time():
     
     return printer_time_request.json()
 
-def get_printing_time_total():
+def get_printing_time_total(PRINTER_IP):
     '''This function will return the estimated time to complete the print job'''
     url = "http://"+PRINTER_IP+"/api/v1/print_job/time_total"
     header = {"Accept": "application/json"}
@@ -29,7 +28,7 @@ def get_printing_time_total():
     
     return printer_time_total_request.json()
 
-def get_printing_time_elapsed():
+def get_printing_time_elapsed(PRINTER_IP):
     '''This function will return the elapsed time of the print job'''
     url = "http://"+PRINTER_IP+"/api/v1/print_job/time_elapsed"
     header = {"Accept": "application/json"}
@@ -38,7 +37,7 @@ def get_printing_time_elapsed():
     
     return printer_time_elapsed_request.json()
 
-def get_printing_progress():
+def get_printing_progress(PRINTER_IP):
     '''This function will return the progress of the print job'''
     url = "http://"+PRINTER_IP+"/api/v1/print_job/progress"
     header = {"Accept": "application/json"}
@@ -47,9 +46,22 @@ def get_printing_progress():
     
     return printer_progress_request.json()
 
-def get_printer_name():
+def get_printing_job(PRINTER_IP):
+    '''This function will return the current job of the printer'''
+    url = "http://"+PRINTER_IP+"/api/v1/print_jobs/printing"
+    header = {"Accept": "application/json"}
+    
+    return requests.get(url, headers=header)
+
+def get_print_preview(PRINTER_IP, UUID):
+    url = "http://"+PRINTER_IP+"/cluster-api/v1/print_jobs/"+UUID+"/preview_image"
+    header = {"Accept": "application/json"}
+    
+    return requests.get(url, headers=header)
+
+def get_printer_name(PRINTER_IP):
     '''This function will return the name of the printer'''
-    url = "http://192.168.0.120/api/v1/system/variant"
+    url = "http://"+PRINTER_IP+"/api/v1/system/variant"
     header = {"Accept": "application/json"}
     
     printer_name_request = requests.get(url, headers=header)

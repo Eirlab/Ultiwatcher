@@ -1,4 +1,4 @@
-var bar = new ProgressBar.Circle(container, {
+const bar = new ProgressBar.Circle(container, {
     color: '#aaa',
     // This has to be the same size as the maximum width to
     // prevent clipping
@@ -28,4 +28,4 @@ var bar = new ProgressBar.Circle(container, {
     bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
     bar.text.style.fontSize = '2rem';
 
-    bar.animate(0.69);  // Number from 0.0 to 1.0
+     // Number from 0.0 to 1.0
