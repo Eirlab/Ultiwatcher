@@ -45,7 +45,7 @@ body {
     height: 100%;
 }
 
-.printer_total_prints{
+#prints_since_cleaned{
     position: relative;
     writing-mode: vertical-rl;
     transform: rotate(180deg);

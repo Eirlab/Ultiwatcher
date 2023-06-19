@@ -112,8 +112,11 @@ def call_get_printer_status(printer_idx):
     printer_extruder_1_id = printer_head["extruders"][1]["hotend"]["id"]
     printer_extruder_1_temperature = printer_head["extruders"][1]["hotend"]["temperature"]["current"]
     
-    #print_since_cleaned
-    return {"status": "Status:  "+printer_status, "bed_temperature": printer_bed_temperature, "extruder_0_id": printer_extruder_0_id, "extruder_0_temperature": printer_extruder_0_temperature, "extruder_1_id": printer_extruder_1_id, "extruder_1_temperature": printer_extruder_1_temperature}
+    prints_since_cleaned = printer_head["extruders"][0]["hotend"]["statistics"]["prints_since_cleaned"]
+    print(prints_since_cleaned)
+    return {"status": "Status:  "+printer_status, "bed_temperature": printer_bed_temperature, "extruder_0_id": printer_extruder_0_id,
+            "extruder_0_temperature": printer_extruder_0_temperature, "extruder_1_id": printer_extruder_1_id,
+            "extruder_1_temperature": printer_extruder_1_temperature, "prints_since_cleaned": prints_since_cleaned +  " total prints" }
 
 @app.route("/")
 def home():

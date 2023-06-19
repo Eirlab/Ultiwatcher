@@ -17,7 +17,7 @@
         <div class="printers-container">
 
             <div class="printer-box-full">
-                <div class="printer_total_prints" >0 total prints</div>
+                <div id="prints_since_cleaned" class="printer_0">0 total prints</div>
                 <div class="printer-box">
                     <div class="printer-info">
                         <div class="printer-title">
@@ -42,7 +42,7 @@
             </div>
 
             <div class="printer-box-full">
-                <div class="printer_total_prints" >0 total prints</div>
+                <div id="prints_since_cleaned" class="printer_1">0 total prints</div>
                 <div class="printer-box">
                     <div class="printer-info">
                         <div class="printer-title">
@@ -67,7 +67,7 @@
             </div>
 
             <div class="printer-box-full">
-                <div class="printer_total_prints" >0 total prints</div>
+                <div id="prints_since_cleaned" class="printer_2">0 total prints</div>
                 <div class="printer-box">
                     <div class="printer-info">
                         <div class="printer-title">
@@ -171,6 +171,9 @@
             document.querySelector(".printer_"+printer_n+"#printer_extruder_0_id").innerHTML =  printer_extruder_0_id;
             let printer_extruder_1_id = extract_response_field(data, "extruder_1_id");
             document.querySelector(".printer_"+printer_n+"#printer_extruder_1_id").innerHTML =  printer_extruder_1_id;  
+
+            let prints_since_cleaned = extract_response_field(data, "prints_since_cleaned");
+            document.querySelector(".printer_"+printer_n+"#prints_since_cleaned").innerHTML =  prints_since_cleaned;
         }
 
         async function calc_time_left(time_total, time_elapsed) {
