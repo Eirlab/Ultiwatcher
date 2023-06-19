@@ -16,7 +16,6 @@ def get_current_time(PRINTER_IP):
     header = {"Accept": "application/json"}
     
     printer_time_request = requests.get(url, headers=header)
-    
     return printer_time_request.json()
 
 def get_printing_time_total(PRINTER_IP):
@@ -43,7 +42,6 @@ def get_printing_progress(PRINTER_IP):
     header = {"Accept": "application/json"}
     
     printer_progress_request = requests.get(url, headers=header)
-    
     return printer_progress_request.json()
 
 def get_printing_job(PRINTER_IP):

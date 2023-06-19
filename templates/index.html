@@ -28,7 +28,7 @@
                             <span id="printer_extruder_1_material" class="printer_0">Mat 2</span>
                         </div>
                         <div id="printing_status" class="printer_0">Printing</div>
-                        <div id="printing_time_remaining" class="printer_0">Time remaining: 00:00:00</div>
+                        <div id="printing_time_left" class="printer_0">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_0">Print name</div>
                     </div>
                     <div class="print-preview">
@@ -53,7 +53,7 @@
                             <span id="printer_extruder_1_material" class="printer_1">Mat 2</span>
                         </div>
                         <div id="printing_status" class="printer_1">Printing</div>
-                        <div id="printing_time_remaining" class="printer_1">Time remaining: 00:00:00</div>
+                        <div id="printing_time_left" class="printer_1">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_1">Print name</div>
                     </div>
                     <div class="print-preview">
@@ -78,7 +78,7 @@
                             <span id="printer_extruder_1_material" class="printer_2">Mat 2</span>
                         </div>
                         <div id="printing_status" class="printer_2">Printing</div>
-                        <div id="printing_time_remaining" class="printer_2">Time remaining: 00:00:00</div>
+                        <div id="printing_time_left" class="printer_2">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_2">Print name</div>
                     </div>
                     <div class="print-preview">
@@ -91,8 +91,6 @@
                 </div>
             </div>
             
-
-
         </div>
 
         <div class="cam-container">
@@ -105,7 +103,7 @@
                     <div id="estimated_finish_time" class="printer_0">Estimated finish time: 00:00:00</div>
                     <div id="printing_time_total" class="printer_0">Estimated print time: 00:00:00</div>
                     <div id="printing_time_elapsed" class="printer_0">Elapsed time: 00:00:00</div>
-                    <div id="start_time" class="printer_0">Start time: 00:00:00</div>
+                    <div id="current_time" class="printer_0">Start time: 00:00:00</div>
                 </div>
                 <div id="container"></div>
             </div>
@@ -116,58 +114,46 @@
     <script>
        
         let server_url = "http://127.0.0.1:5000/";
-        
-        async function call_get_api(api_to_call, printer_n) {
-            //get the reponse from the server and display it
-            let url  = server_url +'/call_'+ api_to_call;
-            let response = fetch(url);
-            let data = await (await response).text();
-            divId = api_to_call.replace("get_", "");
-            document.querySelector(".printer_"+printer_n+"#"+divId).innerHTML = data;
-        }
-
-        async function post_ip_idx(printer_n) {
-            //post the ip index to the server as form data
-            let url  = server_url +'/switch_ip';
-            let response = fetch(url, {
-                method: 'POST',
-                body: new URLSearchParams({
-                    'ip_idx': printer_n
-                })
-            });
-            let data = await (await response).text();
-
-
-
-        }
-
-        async function update_progress_wheel(printer_n){
-            //get the reponse from the server and display it
-            let url  = server_url +'/call_get_printing_progress';
-            let response = fetch(url);
-            let data = await (await response).text();
-    
-            bar.animate(data );  // Number from 0.0 to 1.0
-        }
 
         function extract_response_field(data, field_to_extract) {
             //get what's after "field_to_extract": and before the next comma and remove the quotes and } at the end
             return data.split(field_to_extract+"\":")[1].split(",")[0].replace(/['"]+/g, '').replace("}", "");
         }
 
+        async function call_get_api(api_to_call, printer_n) {
+            //get the reponse from the server and display it
+            let url  = server_url +'/call_'+ api_to_call +'/'+printer_n;
+            let response = fetch(url);
+            let data = await (await response).text();
+            divId = api_to_call.replace("get_", "");
+            document.querySelector(".printer_"+printer_n+"#"+divId).innerHTML = data;
+        }
+
+        async function update_progress_wheel(printer_n){
+            //get the reponse from the server and display it
+            let url  = server_url +'/call_get_printing_progress/'+printer_n;
+            let response = fetch(url);
+            let data = await (await response).text();
+            console.log(data);
+            bar.animate(data);  // Number from 0.0 to 1.0
+        }
+
         async function call_get_printing_job(printer_n){
-            let url  = server_url +'/call_get_printing_job';
+            let url  = server_url +'/call_get_printing_job'+"/"+printer_n;
             let response = fetch(url);
             let data = await (await response).text();
             
             let print_name = extract_response_field(data, "name");
+            let print_uuid = extract_response_field(data, "uuid");
+            console.log(print_uuid);
             document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
         }
 
         async function call_get_printer_status(printer_n) {
             //get the printer_n status variable from the server and display it
-            let url  = server_url +'/call_get_printer_status';
+            let url  = server_url +'/call_get_printer_status'+"/"+printer_n;
             let response = fetch(url);
+            //await response and call next printer when response is received
             let data = await (await response).text();
 
             let printing_status = extract_response_field(data, "status");
@@ -184,33 +170,71 @@
             let printer_extruder_0_id = extract_response_field(data, "extruder_0_id");
             document.querySelector(".printer_"+printer_n+"#printer_extruder_0_id").innerHTML =  printer_extruder_0_id;
             let printer_extruder_1_id = extract_response_field(data, "extruder_1_id");
-            document.querySelector(".printer_"+printer_n+"#printer_extruder_1_id").innerHTML =  printer_extruder_1_id;
+            document.querySelector(".printer_"+printer_n+"#printer_extruder_1_id").innerHTML =  printer_extruder_1_id;  
         }
-        
+
+        async function calc_time_left(time_total, time_elapsed) {
+            console.log(time_total);
+            console.log(time_elapsed);
+            let time_left = time_total - time_elapsed;
+        }
+
         function api_call_loop_5000() {
             //call all apis every second
-            setTimeout(api_call_loop_5000, 5000)
+            setTimeout(api_call_loop_5000, 3000)
+            update_progress_wheel(0);
+            for (let i = 0; i < 3; i++) {
+                call_get_printer_status(i);
+                call_get_api("get_printer_name", i);
+                call_get_printing_job(i)
+                
+                //call_get_api("get_current_time", 0);
+                call_get_api("get_printing_time_total", 0);
+                call_get_api("get_printing_time_elapsed", 0);
+                call_get_api("get_printing_time_left",0);
 
-            //call_get_api("get_current_time", 0);
-            //update_progress_wheel(0);
-            call_get_api("get_printer_name", 0);
-            //call_get_printer_status(0);
-
-            //call_get_printing_job(0);
+            }
+            
         }
         function api_call_loop() {
             //call all apis every second
             setTimeout(api_call_loop, 2000)
 
-            //call_get_api("get_current_time", 0);
-            //call_get_api("get_printing_time_total", 0);
-            //call_get_api("get_printing_time_elapsed", 0);
+            
         }
         
-        post_ip_idx(0);
+        //setTimeout(api_call_loop_5000, 5000)
 
+        /*
+        update_progress_wheel(1);
+        call_get_api("get_printer_name", 1);
+        call_get_printer_status(1);  
+
+
+        setTimeout( function() {
+            update_progress_wheel(2);
+            call_get_api("get_printer_name", 2);
+            call_get_printer_status(2);  
+            call_next_printer();
+
+        }, 2000);
+
+        call_next_printer();
+
+        setTimeout( function() {
+            update_progress_wheel(0);
+            call_get_api("get_printer_name", 0);
+            call_get_printer_status(0);  
+        }, 4000);
+
+        */
+
+
+        
         api_call_loop_5000();
         api_call_loop();
+        
+
 
 
     </script>

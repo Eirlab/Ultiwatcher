@@ -124,7 +124,7 @@ body {
     font-weight: 700;
 }
 #printer_name{
-    font-size: 120%;
+    font-size: 110%;
 }
 #printer_extruder_0_id, #printer_extruder_1_id, #printer_extruder_0_material, #printer_extruder_1_material{
     font-size: 90%;
