@@ -22,7 +22,7 @@ def call_get_current_time(printer_idx):
     current_time = datetime.datetime.strptime(current_time, '%Y-%m-%d %H:%M:%S')
     current_time = current_time + datetime.timedelta(hours=2)
     #only return the time
-    current_time = current_time.strftime('%H:%M:%S')
+    current_time = current_time.strftime('%H:%M')
     return str(current_time)
 
 

@@ -12,7 +12,7 @@
 <body>
     
 
-
+    <div id="current_time" class="printer_0">00:00</div>
     <div class="ultiwatcher-container">
         <div class="printers-container">
 
@@ -103,7 +103,7 @@
                     <div id="estimated_finish_time" class="printer_0">Estimated finish time: 00:00:00</div>
                     <div id="printing_time_total" class="printer_0">Estimated print time: 00:00:00</div>
                     <div id="printing_time_elapsed" class="printer_0">Elapsed time: 00:00:00</div>
-                    <div id="current_time" class="printer_0">Start time: 00:00:00</div>
+                    <div id="start_time" class="printer_0">Start time: 00:00:00</div>
                 </div>
                 <div id="container"></div>
             </div>
@@ -186,6 +186,7 @@
             //call all apis every second
             setTimeout(api_call_loop_5000, 3000)
             update_progress_wheel(0);
+            call_get_api("get_current_time", 0);
             for (let i = 0; i < 3; i++) {
                 call_get_printer_status(i);
                 call_get_api("get_printer_name", i);

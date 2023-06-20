@@ -17,7 +17,13 @@ body {
     line-height: 1.428571429;
 }
 
-
+#current_time{
+    position: relative;
+    top: 80px;
+    left: 227px;
+    font-size: 300%;
+    font-weight: 700;
+}
 /* Grid containing 2 columns, one with 3 rows and one with 1 row */
 .ultiwatcher-container{
     display: grid;
@@ -25,7 +31,9 @@ body {
     grid-template-rows: 1fr;
     height: 70%;
     width: 80%;
-    margin: 90px auto;
+    margin: auto;
+    position: relative;
+    top: 90px;
     gap: 20px;
 }
 
