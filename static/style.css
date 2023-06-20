@@ -64,7 +64,7 @@ body {
     color: #767676;
 }
 
-.printer-box{
+#printer-box{
     background: #F2F2F2;
     border: 3px solid #BABABA;
     border-radius: 15px;

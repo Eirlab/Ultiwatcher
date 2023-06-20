@@ -18,7 +18,7 @@
 
             <div class="printer-box-full">
                 <div id="prints_since_cleaned" class="printer_0">0 total prints</div>
-                <div class="printer-box">
+                <div id="printer-box" class="printer_0">
                     <div class="printer-info">
                         <div class="printer-title">
                             <span id="printer_name" class="printer_0">Printer 1</span>
@@ -43,7 +43,7 @@
 
             <div class="printer-box-full">
                 <div id="prints_since_cleaned" class="printer_1">0 total prints</div>
-                <div class="printer-box">
+                <div id="printer-box" class="printer_1">
                     <div class="printer-info">
                         <div class="printer-title">
                             <span id="printer_name" class="printer_1">Printer 2</span>
@@ -68,7 +68,7 @@
 
             <div class="printer-box-full">
                 <div id="prints_since_cleaned" class="printer_2">0 total prints</div>
-                <div class="printer-box">
+                <div id="printer-box" class="printer_2">
                     <div class="printer-info">
                         <div class="printer-title">
                             <span id="printer_name" class="printer_2">Printer 3</span>
@@ -100,9 +100,9 @@
             </div>
             <div class="time-box">
                 <div class="time-box-text">
-                    <div id="estimated_finish_time" class="printer_0">Estimated finish time: 00:00:00</div>
-                    <div id="printing_time_total" class="printer_0">Estimated print time: 00:00:00</div>
-                    <div id="printing_time_elapsed" class="printer_0">Elapsed time: 00:00:00</div>
+                    <div id="estimated_finish_time" class="printer_0 printer_1 printer_2">Estimated finish time: 00:00:00</div>
+                    <div id="printing_time_total" class="printer_0 printer_1 printer_2">Estimated print time: 00:00:00</div>
+                    <div id="printing_time_elapsed" class="printer_0 printer_1 printer_2">Elapsed time: 00:00:00</div>
                     <div id="start_time" class="printer_0">Start time: 00:00:00</div>
                 </div>
                 <div id="container"></div>
@@ -112,7 +112,7 @@
     <script src="{{url_for('static', filename='progress-bar.js')}}"></script>
 
     <script>
-       
+        var highlighthed_idx = 0;
         let server_url = "http://127.0.0.1:5000/";
 
         function extract_response_field(data, field_to_extract) {
@@ -187,7 +187,6 @@
         function api_call_loop_5000() {
             //call all apis every second
             setTimeout(api_call_loop_5000, 3000)
-            update_progress_wheel(0);
             call_get_api("get_current_time", 0);
             for (let i = 0; i < 3; i++) {
                 call_get_printer_status(i);
@@ -195,51 +194,30 @@
                 call_get_printing_job(i)
                 
                 //call_get_api("get_current_time", 0);
-                call_get_api("get_printing_time_total", 0);
-                call_get_api("get_printing_time_elapsed", 0);
-                call_get_api("get_printing_time_left",0);
 
             }
             
         }
         function api_call_loop() {
             //call all apis every second
-            setTimeout(api_call_loop, 2000)
-
+            setTimeout(api_call_loop, 7000)
+            if (highlighthed_idx == 2) {
+                highlighthed_idx = 0;
+            } else {
+                highlighthed_idx++;
+            }
+            for (let i = 0; i < 3; i++) {
+                document.querySelector(".printer_"+i+"#printer-box").style.border="3px solid #BABABA";
+            }
+            document.querySelector(".printer_"+highlighthed_idx+"#printer-box").style.border="3px solid #575757";
+            update_progress_wheel(highlighthed_idx);
+            call_get_api("get_printing_time_total", highlighthed_idx);
+            call_get_api("get_printing_time_elapsed", highlighthed_idx);
+            call_get_api("get_printing_time_left",highlighthed_idx);
             
         }
-        
-        //setTimeout(api_call_loop_5000, 5000)
-
-        /*
-        update_progress_wheel(1);
-        call_get_api("get_printer_name", 1);
-        call_get_printer_status(1);  
-
-
-        setTimeout( function() {
-            update_progress_wheel(2);
-            call_get_api("get_printer_name", 2);
-            call_get_printer_status(2);  
-            call_next_printer();
-
-        }, 2000);
-
-        call_next_printer();
-
-        setTimeout( function() {
-            update_progress_wheel(0);
-            call_get_api("get_printer_name", 0);
-            call_get_printer_status(0);  
-        }, 4000);
-
-        */
-
         api_call_loop_5000();
         api_call_loop();
-        
-
-
 
     </script>
 </body>
