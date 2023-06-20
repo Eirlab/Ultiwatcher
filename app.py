@@ -23,7 +23,7 @@ def call_get_current_time(printer_idx):
     current_time = current_time + datetime.timedelta(hours=2)
     #only return the time
     current_time = current_time.strftime('%H:%M')
-    return str(current_time)
+    return str(current_time)+"<img src='static/eirlab.png' style='margin-left:30px;' width='auto' height='50'>"
 
 
 @app.route("/call_get_printing_time_total/<printer_idx>")
@@ -85,13 +85,13 @@ def call_get_printing_job(printer_idx):
     try:
         print_name = printing_job_body.split('"name":')[1].split(',')[0].replace('"', '')
         print_uuid = printing_job_body.split('"uuid":')[1].split(',')[0].replace('"', '').replace('}' , '')
-
+        print_preview = "<img src='http://"+str(PRINTER_IP)+"/cluster-api/v1/print_jobs/"+str(print_uuid)+"/preview_image>"
     except:
         print_name = "No current print"
-        print_uuid = "nouuid"
+        print_preview = "No current print"
     #print_preview = get_print_preview(PRINTER_IP, print_uuid)
     
-    return {"name": "Print name: "+ print_name, "uuid": print_uuid}
+    return {"name": "Print name: "+ print_name, "preview": print_preview}
 
 
 @app.route("/call_get_printer_status/<printer_idx>")

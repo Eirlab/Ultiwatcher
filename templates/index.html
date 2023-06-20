@@ -95,7 +95,7 @@
 
         <div class="cam-container">
             <div class="cam-box">
-                <img class="cam-stream" src="http://192.168.0.119:8080/?action=stream" alt="">
+                <img class="cam-stream" style="border-radius:10px;" src="http://192.168.0.119:8080/?action=stream" alt="">
 
             </div>
             <div class="time-box">
@@ -144,10 +144,10 @@
             let data = await (await response).text();
             
             let print_name = extract_response_field(data, "name");
-            let print_uuid = extract_response_field(data, "uuid");
-            console.log(print_uuid, print_uuid.length);
+            let print_preview = extract_response_field(data, "preview");
+            console.log(print_preview, print_preview.length);
             document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
-            document.querySelector(".printer_"+printer_n+"#print_preview").innerHTML = '<img src="http://192.168.0.119/cluster-api/v1/print_jobs/'+print_uuid+'/preview_image" alt="">';
+            document.querySelector(".printer_"+printer_n+"#print_preview").innerHTML = print_preview;
 
         }
 
