@@ -95,7 +95,7 @@
 
         <div class="cam-container">
             <div class="cam-box">
-                <img class="cam-stream" style="border-radius:10px;" src="http://192.168.0.119:8080/?action=stream" alt="">
+                <img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px;" src="http://192.168.0.119:8080/?action=stream" alt="">
 
             </div>
             <div class="time-box">
@@ -177,10 +177,15 @@
             let prints_since_cleaned = extract_response_field(data, "prints_since_cleaned");
             document.querySelector(".printer_"+printer_n+"#prints_since_cleaned").innerHTML =  prints_since_cleaned;
         }
-
+        async function call_get_camera_feed(printer_n) {
+            //get the printer_n status variable from the server and display it
+            let url  = server_url +'/call_get_camera_feed'+"/"+printer_n;
+            let response = fetch(url);
+            //await response and call next printer when response is received
+            let data = await (await response).text();
+            document.querySelector(".cam-box").innerHTML = data;
+        }
         async function calc_time_left(time_total, time_elapsed) {
-            console.log(time_total);
-            console.log(time_elapsed);
             let time_left = time_total - time_elapsed;
         }
 
@@ -200,7 +205,7 @@
         }
         function api_call_loop() {
             //call all apis every second
-            setTimeout(api_call_loop, 7000)
+            setTimeout(api_call_loop, 10000)
             if (highlighthed_idx == 2) {
                 highlighthed_idx = 0;
             } else {
@@ -214,7 +219,7 @@
             call_get_api("get_printing_time_total", highlighthed_idx);
             call_get_api("get_printing_time_elapsed", highlighthed_idx);
             call_get_api("get_printing_time_left",highlighthed_idx);
-            
+            call_get_camera_feed(highlighthed_idx);
         }
         api_call_loop_5000();
         api_call_loop();

@@ -102,7 +102,7 @@ body {
     border-radius: 15px;
 }
 
-.cam-stream {
+#camera_feed {
     display: block;
     width: 60%;
     height: auto;
