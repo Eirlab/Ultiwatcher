@@ -1,22 +1,17 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, render_template
 from api_call import *
 
 import datetime
-import time
 
 app = Flask(__name__)
 
-PRINTER_IP_IDX = 0
 IP_LIST= ["192.168.0.119","192.168.0.120","192.168.0.114"]
-PRINTER_IP = IP_LIST[PRINTER_IP_IDX]
-
-
 
 @app.route("/call_get_current_time/<printer_idx>")
 def call_get_current_time(printer_idx):
     """This function will return the current time of the printer in utc"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    current_time_utc = get_current_time(PRINTER_IP)["utc"]
+    printer_ip = IP_LIST[int(printer_idx)]
+    current_time_utc = get_current_time(printer_ip)["utc"]
     current_time = datetime.datetime.utcfromtimestamp(current_time_utc).strftime('%Y-%m-%d %H:%M:%S')
     #add 2 hours to utc time
     current_time = datetime.datetime.strptime(current_time, '%Y-%m-%d %H:%M:%S')
@@ -29,8 +24,8 @@ def call_get_current_time(printer_idx):
 @app.route("/call_get_printing_time_total/<printer_idx>")
 def call_get_printing_time_total(printer_idx):
     """This function will return the estimated time to complete the print job"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printing_time_total_utc = get_printing_time_total(PRINTER_IP)
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_time_total_utc = get_printing_time_total(printer_ip)
     try:
         printing_time_total = datetime.datetime.utcfromtimestamp(printing_time_total_utc).strftime('%H:%M:%S')
     except:
@@ -40,11 +35,15 @@ def call_get_printing_time_total(printer_idx):
 @app.route("/call_get_printing_time_left/<printer_idx>")
 def call_get_printing_time_left(printer_idx):
     """This function will return the estimated time left to complete the print job"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printing_time_total_utc = get_printing_time_total(PRINTER_IP)
-    printing_time_elapsed_utc = get_printing_time_elapsed(PRINTER_IP)
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_time_total_utc = get_printing_time_total(printer_ip)
+    printing_time_elapsed_utc = get_printing_time_elapsed(printer_ip)
     try:
-        printing_time_left = datetime.datetime.utcfromtimestamp(printing_time_total_utc-printing_time_elapsed_utc).strftime('%H:%M:%S')
+        printing_time_left = printing_time_total_utc-printing_time_elapsed_utc
+        if printing_time_left < 0:
+            printing_time_left = 0
+        else:
+            printing_time_left = datetime.datetime.utcfromtimestamp(printing_time_left).strftime('%H:%M:%S')
     except:
         printing_time_left = "00:00:00"
     return "Time remaining: "+str(printing_time_left)
@@ -52,8 +51,8 @@ def call_get_printing_time_left(printer_idx):
 @app.route("/call_get_printing_time_elapsed/<printer_idx>")
 def call_get_printing_time_elapsed(printer_idx):
     """This function will return the elapsed time of the print job"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printing_time_elapsed_utc = get_printing_time_elapsed(PRINTER_IP)
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_time_elapsed_utc = get_printing_time_elapsed(printer_ip)
     try:
         printing_time_elapsed = datetime.datetime.utcfromtimestamp(printing_time_elapsed_utc).strftime('%H:%M:%S')
     except:
@@ -63,39 +62,39 @@ def call_get_printing_time_elapsed(printer_idx):
 @app.route("/call_get_camera_feed/<printer_idx>")
 def call_get_camera_feed(printer_idx):
     """This function will return the camera feed of the printer"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px;" src="http://'+str(PRINTER_IP)+':8080/?action=stream" alt="">'
+    printer_ip = IP_LIST[int(printer_idx)]
+    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px;" src="http://'+str(printer_ip)+':8080/?action=stream" alt="">'
 
 
 @app.route("/call_get_printing_progress/<printer_idx>")
 def call_get_printing_progress(printer_idx):
     """This function will return the progress of the print job"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printing_progress = get_printing_progress(PRINTER_IP)
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_progress = get_printing_progress(printer_ip)
     return str(printing_progress)
 
 @app.route("/call_get_printer_name/<printer_idx>")
 def call_get_printer_name(printer_idx):
     """This function will return the name of the printer"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    return str(get_printer_name(PRINTER_IP))
+    printer_ip = IP_LIST[int(printer_idx)]
+    return str(get_printer_name(printer_ip))
 
 @app.route("/call_get_printing_job/<printer_idx>")
 def call_get_printing_job(printer_idx):
     """This function will return the current job of the printer"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printing_job_body = get_printing_job(PRINTER_IP).content
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_job_body = get_printing_job(printer_ip).content
     #extract "name" from body
     printing_job_body = printing_job_body.decode("utf-8")
     
     try:
         print_name = printing_job_body.split('"name":')[1].split(',')[0].replace('"', '')
         print_uuid = printing_job_body.split('"uuid":')[1].split(',')[0].replace('"', '').replace('}' , '')
-        print_preview = "<img src='http://"+str(PRINTER_IP)+"/cluster-api/v1/print_jobs/"+str(print_uuid)+"/preview_image>"
+        print_preview = "<img src='http://"+str(printer_ip)+"/cluster-api/v1/print_jobs/"+str(print_uuid)+"/preview_image>"
     except:
         print_name = "No current print"
         print_preview = "No current print"
-    #print_preview = get_print_preview(PRINTER_IP, print_uuid)
+    #print_preview = get_print_preview(printer_ip, print_uuid)
     
     return {"name": "Print name: "+ print_name, "preview": print_preview}
 
@@ -103,8 +102,8 @@ def call_get_printing_job(printer_idx):
 @app.route("/call_get_printer_status/<printer_idx>")
 def call_get_printer_status(printer_idx):
     """This function will return the status of the printer"""
-    PRINTER_IP = IP_LIST[int(printer_idx)]
-    printer_status_json = get_printer_status(PRINTER_IP)
+    printer_ip = IP_LIST[int(printer_idx)]
+    printer_status_json = get_printer_status(printer_ip)
     printer_status = printer_status_json["status"] 
     if printer_status == "idle":
         printer_status = "<span style='font-weight:bold;color:#575757;'>READY</span>"

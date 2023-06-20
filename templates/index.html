@@ -185,9 +185,6 @@
             let data = await (await response).text();
             document.querySelector(".cam-box").innerHTML = data;
         }
-        async function calc_time_left(time_total, time_elapsed) {
-            let time_left = time_total - time_elapsed;
-        }
 
         function api_call_loop_5000() {
             //call all apis every second
@@ -213,6 +210,7 @@
             }
             for (let i = 0; i < 3; i++) {
                 document.querySelector(".printer_"+i+"#printer-box").style.border="3px solid #BABABA";
+                document.querySelector(".progressbar-text").innerHTML = 0;
             }
             document.querySelector(".printer_"+highlighthed_idx+"#printer-box").style.border="3px solid #575757";
             update_progress_wheel(highlighthed_idx);
