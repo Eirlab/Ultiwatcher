@@ -46,7 +46,7 @@ def get_printing_progress(PRINTER_IP):
 
 def get_printing_job(PRINTER_IP):
     '''This function will return the current job of the printer'''
-    url = "http://"+PRINTER_IP+"/api/v1/print_job"
+    url = "http://"+PRINTER_IP+"/cluster-api/v1/print_jobs/"
     header = {"Accept": "application/json"}
     
     return requests.get(url, headers=header)

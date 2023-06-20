@@ -85,6 +85,7 @@ def call_get_printing_job(printer_idx):
     try:
         print_name = printing_job_body.split('"name":')[1].split(',')[0].replace('"', '')
         print_uuid = printing_job_body.split('"uuid":')[1].split(',')[0].replace('"', '').replace('}' , '')
+
     except:
         print_name = "No current print"
         print_uuid = "nouuid"

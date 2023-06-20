@@ -6,6 +6,8 @@ html, body {
 }
 
 *{
+    font-family: "Roboto";
+
 }
 
 body {
@@ -22,7 +24,8 @@ body {
     top: 80px;
     left: 227px;
     font-size: 300%;
-    font-weight: 700;
+    font-weight: 600;
+    font-style: normal;
 }
 /* Grid containing 2 columns, one with 3 rows and one with 1 row */
 .ultiwatcher-container{
@@ -136,4 +139,18 @@ body {
 }
 #printer_extruder_0_id, #printer_extruder_1_id, #printer_extruder_0_material, #printer_extruder_1_material{
     font-size: 90%;
+}
+
+#print_preview {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr ;
+    padding: 20px;
+}
+#print_preview img{
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    border-radius: 15px;
+
 }

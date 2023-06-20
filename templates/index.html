@@ -31,7 +31,7 @@
                         <div id="printing_time_left" class="printer_0">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_0">Print name</div>
                     </div>
-                    <div class="print-preview">
+                    <div id="print_preview" class="printer_0">
                     </div>
                     <div class="printer-temp">
                         <div id="printer_extruder_0_temperature" class="printer_0">Extruder 1</div>
@@ -56,7 +56,7 @@
                         <div id="printing_time_left" class="printer_1">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_1">Print name</div>
                     </div>
-                    <div class="print-preview">
+                    <div id="print_preview"class="printer_1" >
                     </div>
                     <div class="printer-temp">
                         <div id="printer_extruder_0_temperature" class="printer_1">Extruder 1</div>
@@ -81,7 +81,7 @@
                         <div id="printing_time_left" class="printer_2">Time remaining: 00:00:00</div>
                         <div id="print_name" class="printer_2">Print name</div>
                     </div>
-                    <div class="print-preview">
+                    <div id="print_preview" class="printer_2">
                     </div>
                     <div class="printer-temp">
                         <div id="printer_extruder_0_temperature" class="printer_2">Extruder 1</div>
@@ -145,8 +145,10 @@
             
             let print_name = extract_response_field(data, "name");
             let print_uuid = extract_response_field(data, "uuid");
-            console.log(print_uuid);
+            console.log(print_uuid, print_uuid.length);
             document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
+            document.querySelector(".printer_"+printer_n+"#print_preview").innerHTML = '<img src="http://192.168.0.119/cluster-api/v1/print_jobs/'+print_uuid+'/preview_image" alt="">';
+
         }
 
         async function call_get_printer_status(printer_n) {
@@ -233,8 +235,6 @@
 
         */
 
-
-        
         api_call_loop_5000();
         api_call_loop();
         
