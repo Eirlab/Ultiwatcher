@@ -63,7 +63,7 @@ def call_get_printing_time_elapsed(printer_idx):
 def call_get_camera_feed(printer_idx):
     """This function will return the camera feed of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
-    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px;" src="http://'+str(printer_ip)+':8080/?action=stream" alt="">'
+    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px; width: 320px; height: 240px;" src="http://'+str(printer_ip)+':8080/?action=stream" alt="">'
 
 
 @app.route("/call_get_printing_progress/<printer_idx>")

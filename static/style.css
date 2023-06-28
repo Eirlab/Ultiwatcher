@@ -104,8 +104,8 @@ body {
 
 #camera_feed {
     display: block;
-    width: 320px;
-    height: 240px;
+    width: 60%;
+    height: auto;
     margin: 34px auto; 
 }
 
