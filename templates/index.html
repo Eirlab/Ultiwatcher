@@ -24,8 +24,8 @@
                             <span id="printer_name" class="printer_0">Printer 1</span>
                             <span id="printer_extruder_0_id" class="printer_0">Extruder 1</span>
                             <span id="printer_extruder_1_id" class="printer_0">Extruder 2</span>
-                            <span id="printer_extruder_0_material" class="printer_0">Mat 1</span>
-                            <span id="printer_extruder_1_material" class="printer_0">Mat 2</span>
+                            <span id="printer_extruder_0_material" class="printer_0"></span>
+                            <span id="printer_extruder_1_material" class="printer_0"></span>
                         </div>
                         <div id="printing_status" class="printer_0">Printing</div>
                         <div id="printing_time_left" class="printer_0">Time remaining: 00:00:00</div>
@@ -49,8 +49,8 @@
                             <span id="printer_name" class="printer_1">Printer 2</span>
                             <span id="printer_extruder_0_id" class="printer_1">Extruder 1</span>
                             <span id="printer_extruder_1_id" class="printer_1">Extruder 2</span>
-                            <span id="printer_extruder_0_material" class="printer_1">Mat 1</span>
-                            <span id="printer_extruder_1_material" class="printer_1">Mat 2</span>
+                            <span id="printer_extruder_0_material" class="printer_1"></span>
+                            <span id="printer_extruder_1_material" class="printer_1"></span>
                         </div>
                         <div id="printing_status" class="printer_1">Printing</div>
                         <div id="printing_time_left" class="printer_1">Time remaining: 00:00:00</div>
@@ -74,8 +74,8 @@
                             <span id="printer_name" class="printer_2">Printer 3</span>
                             <span id="printer_extruder_0_id" class="printer_2">Extruder 1</span>
                             <span id="printer_extruder_1_id" class="printer_2">Extruder 2</span>
-                            <span id="printer_extruder_0_material" class="printer_2">Mat 1</span>
-                            <span id="printer_extruder_1_material" class="printer_2">Mat 2</span>
+                            <span id="printer_extruder_0_material" class="printer_2"></span>
+                            <span id="printer_extruder_1_material" class="printer_2"></span>
                         </div>
                         <div id="printing_status" class="printer_2">Printing</div>
                         <div id="printing_time_left" class="printer_2">Time remaining: 00:00:00</div>
@@ -103,7 +103,7 @@
                     <div id="estimated_finish_time" class="printer_0 printer_1 printer_2">Estimated finish time: 00:00:00</div>
                     <div id="printing_time_total" class="printer_0 printer_1 printer_2">Estimated print time: 00:00:00</div>
                     <div id="printing_time_elapsed" class="printer_0 printer_1 printer_2">Elapsed time: 00:00:00</div>
-                    <div id="start_time" class="printer_0">Start time: 00:00:00</div>
+                    <div id="start_time" class="printer_0 printer_1 printer_2">Start time: 00:00:00</div>
                 </div>
                 <div id="container"></div>
             </div>
@@ -148,7 +148,6 @@
             console.log(print_preview, print_preview.length);
             document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
             document.querySelector(".printer_"+printer_n+"#print_preview").innerHTML = print_preview;
-
         }
 
         async function call_get_printer_status(printer_n) {
@@ -202,7 +201,7 @@
         }
         function api_call_loop() {
             //call all apis every second
-            setTimeout(api_call_loop, 20000)
+            setTimeout(api_call_loop, 5000)
             if (highlighthed_idx == 2) {
                 highlighthed_idx = 0;
             } else {
@@ -217,6 +216,7 @@
             call_get_api("get_printing_time_total", highlighthed_idx);
             call_get_api("get_printing_time_elapsed", highlighthed_idx);
             call_get_api("get_printing_time_left",highlighthed_idx);
+            call_get_api("get_start_time", highlighthed_idx);
             call_get_camera_feed(highlighthed_idx);
         }
         api_call_loop_5000();

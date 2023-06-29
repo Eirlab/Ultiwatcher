@@ -71,6 +71,11 @@ def call_get_printing_progress(printer_idx):
     """This function will return the progress of the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
     printing_progress = get_printing_progress(printer_ip)
+    try:
+        if printing_progress['message'] != None:
+            printing_progress = 1
+    except:
+        print(printing_progress)
     return str(printing_progress)
 
 @app.route("/call_get_printer_name/<printer_idx>")
@@ -84,7 +89,6 @@ def call_get_printing_job(printer_idx):
     """This function will return the current job of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
     printing_job_body = get_printing_job(printer_ip).content
-    #extract "name" from body
     printing_job_body = printing_job_body.decode("utf-8")
     
     try:
@@ -95,9 +99,24 @@ def call_get_printing_job(printer_idx):
         print_name = "No current print"
         print_preview = "No current print"
     #print_preview = get_print_preview(printer_ip, print_uuid)
-    
     return {"name": "Print name: "+ print_name, "preview": print_preview}
 
+@app.route("/call_get_start_time/<printer_idx>")
+def call_get_start_time(printer_idx):
+    """This function will return the start time of the print job"""
+    printer_ip = IP_LIST[int(printer_idx)]
+    printing_job_body = get_printing_job(printer_ip).content
+    printing_job_body = printing_job_body.decode("utf-8")
+    
+    try:
+        start_time = printing_job_body.split('"created_at":')[1].split(',')[0].replace('"', '')
+        start_time = start_time[len(start_time)-15:len(start_time)-7]
+        start_time = str(datetime.datetime.strptime(start_time, '%H:%M:%S') + datetime.timedelta(hours=2))
+        start_time = start_time[len(start_time)-8:len(start_time)]
+    except:
+        start_time = "00:00:00"
+    print(start_time)
+    return "Start time: "+str(start_time)
 
 @app.route("/call_get_printer_status/<printer_idx>")
 def call_get_printer_status(printer_idx):
