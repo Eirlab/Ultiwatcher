@@ -208,10 +208,10 @@
                 highlighthed_idx++;
             }
             for (let i = 0; i < 3; i++) {
-                document.querySelector(".printer_"+i+"#printer-box").style.border="3px solid #BABABA";
+                document.querySelector(".printer_"+i+"#printer-box").style.border="4px solid #BABABA";
                 document.querySelector(".progressbar-text").innerHTML = 0;
             }
-            document.querySelector(".printer_"+highlighthed_idx+"#printer-box").style.border="3px solid #575757";
+            document.querySelector(".printer_"+highlighthed_idx+"#printer-box").style.border="4px solid #575757";
             update_progress_wheel(highlighthed_idx);
             call_get_api("get_printing_time_total", highlighthed_idx);
             call_get_api("get_printing_time_elapsed", highlighthed_idx);

@@ -18,7 +18,7 @@ def call_get_current_time(printer_idx):
     current_time = current_time + datetime.timedelta(hours=2)
     #only return the time
     current_time = current_time.strftime('%H:%M')
-    return str(current_time)+"<img src='static/eirlab.png' style='margin-left:30px;' width='auto' height='50'>"
+    return str(current_time)+"<img src='static/eirlab.png' style='margin-left:30px;' width='auto' height='80'>"
 
 
 @app.route("/call_get_printing_time_total/<printer_idx>")
@@ -63,7 +63,7 @@ def call_get_printing_time_elapsed(printer_idx):
 def call_get_camera_feed(printer_idx):
     """This function will return the camera feed of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
-    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px; width: 320px; height: 240px;" src="http://'+str(printer_ip)+':8080/?action=stream" alt="">'
+    return '<img id="camera_feed" class="printer_0 printer_1 printer_2" style="border-radius:10px; width: 400px; height: 300px;" src="http://'+str(printer_ip)+':8080/?action=stream" alt="">'
 
 
 @app.route("/call_get_printing_progress/<printer_idx>")
@@ -97,7 +97,7 @@ def call_get_printing_job(printer_idx):
         print_preview = "<img src='http://"+str(printer_ip)+"/cluster-api/v1/print_jobs/"+str(print_uuid)+"/preview_image>"
     except:
         print_name = "No current print"
-        print_preview = "No current print"
+        print_preview = "<img src='https://static.thenounproject.com/png/4959299-200.png' >"
     #print_preview = get_print_preview(printer_ip, print_uuid)
     return {"name": "Print name: "+ print_name, "preview": print_preview}
 
