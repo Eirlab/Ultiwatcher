@@ -5,7 +5,7 @@ import datetime
 
 app = Flask(__name__)
 
-IP_LIST= ["192.168.0.111","192.168.0.120","192.168.0.119"]
+IP_LIST= ["192.168.0.120","192.168.0.111","192.168.0.119"]
 
 @app.route("/call_get_current_time/<printer_idx>")
 def call_get_current_time(printer_idx):

@@ -21,7 +21,7 @@ body {
 
 #current_time{
     position: relative;
-    top: 120px;
+    top: 140px;
     left: 227px;
     font-size: 330%;
     font-weight: 600;
@@ -36,7 +36,7 @@ body {
     width: 80%;
     margin: auto;
     position: relative;
-    top: 130px;
+    top: 150px;
     gap: 20px;
 }
 
@@ -152,4 +152,6 @@ body {
     height: 80%;
     object-fit: contain;
     border-radius: 15px;
+    position: relative;
+    top:15px;
 }
