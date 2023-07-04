@@ -156,6 +156,7 @@
             let data = await (await response).text();
 
             let printing_status = extract_response_field(data, "status");
+            /*
             if (document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML.includes("PRINTING") && document.querySelector(".printer_"+printer_n+"#printing_time_left").innerHTML=="Time remaining: 0") {
                 //if printing, call get_printing_progress
                 document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = "Status: <span style='font-weight:bold;color:#75CD67;'>FINISHED</span>";
@@ -165,7 +166,8 @@
             } else {
                 document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
             }
-
+            */
+            document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
             let printer_bed_temperature = extract_response_field(data, "bed_temperature");
             document.querySelector(".printer_"+printer_n+"#printer_bed_temperature").innerHTML = "Bed: " + printer_bed_temperature + "°C";
 
