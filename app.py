@@ -40,12 +40,13 @@ def call_get_printing_time_left(printer_idx):
     printing_time_elapsed_utc = get_printing_time_elapsed(printer_ip)
     try:
         printing_time_left = printing_time_total_utc-printing_time_elapsed_utc
-        if printing_time_left < 0:
-            printing_time_left = 0
+        if printing_time_left <= 0:
+            printing_time_left = "0"
         else:
             printing_time_left = datetime.datetime.utcfromtimestamp(printing_time_left).strftime('%H:%M:%S')
     except:
         printing_time_left = "00:00:00"
+
     return "Time remaining: "+str(printing_time_left)
 
 @app.route("/call_get_printing_time_elapsed/<printer_idx>")
