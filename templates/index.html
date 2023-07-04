@@ -162,6 +162,8 @@
             } else if (!document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML.includes("FINISHED") ) {
                 console.log(document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML, document.querySelector(".printer_"+printer_n+"#printing_time_left").innerHTML);
                 document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
+            } else {
+                document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
             }
 
             let printer_bed_temperature = extract_response_field(data, "bed_temperature");
