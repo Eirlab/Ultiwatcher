@@ -168,6 +168,7 @@
             }
             */
             document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
+            
             let printer_bed_temperature = extract_response_field(data, "bed_temperature");
             document.querySelector(".printer_"+printer_n+"#printer_bed_temperature").innerHTML = "Bed: " + printer_bed_temperature + "°C";
 
