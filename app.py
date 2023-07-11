@@ -1,9 +1,15 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from api_call import *
-
-import datetime
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
+
+
+import datetime
+from flask import Response
+
+
 
 IP_LIST= ["192.168.0.120","192.168.0.111","192.168.0.119"]
 
@@ -80,6 +86,7 @@ def call_get_printing_progress(printer_idx):
     return str(printing_progress)
 
 @app.route("/call_get_printer_name/<printer_idx>")
+@cross_origin()
 def call_get_printer_name(printer_idx):
     """This function will return the name of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -147,4 +154,3 @@ def call_get_printer_status(printer_idx):
 def home():
     return render_template("index.html")
 
-app.run(host="127.0.0.1", port=5000, threaded=True)
