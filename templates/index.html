@@ -11,7 +11,13 @@
 </head>
 <body>
     
+    <div id="com">
+        <div id="com-grid">
+            <img id="com_img" src="static/baravin.png">
+        </div>
+    </div>
 
+    <div id="ultiwatcher">
     <div id="current_time" class="printer_0">00:00</div>
     <div class="ultiwatcher-container">
         <div class="printers-container">
@@ -109,11 +115,14 @@
             </div>
 
         </div>
+
+
+    </div>
     <script src="{{url_for('static', filename='progress-bar.js')}}"></script>
 
     <script>
         var highlighthed_idx = 0;
-        let server_url = "http://127.0.0.1:5000/";
+        let server_url = "http://192.168.0.245:5000/";
 
         function extract_response_field(data, field_to_extract) {
             //get what's after "field_to_extract": and before the next comma and remove the quotes and } at the end
@@ -123,7 +132,8 @@
         async function call_get_api(api_to_call, printer_n) {
             //get the reponse from the server and display it
             let url  = server_url +'/call_'+ api_to_call +'/'+printer_n;
-            let response = fetch(url);
+            //fetch allow cors 
+            let response = fetch(url, {mode: 'cors'});
             let data = await (await response).text();
             divId = api_to_call.replace("get_", "");
             document.querySelector(".printer_"+printer_n+"#"+divId).innerHTML = data;
@@ -144,6 +154,9 @@
             
             let print_name = extract_response_field(data, "name");
             let print_preview = extract_response_field(data, "preview");
+            let print_status = extract_response_field(data, "status");
+
+            document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = print_status;
             document.querySelector(".printer_"+printer_n+"#print_name").innerHTML = print_name;
             document.querySelector(".printer_"+printer_n+"#print_preview").innerHTML = print_preview;
         }
@@ -156,18 +169,8 @@
             let data = await (await response).text();
 
             let printing_status = extract_response_field(data, "status");
-            /*
-            if (document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML.includes("PRINTING") && document.querySelector(".printer_"+printer_n+"#printing_time_left").innerHTML=="Time remaining: 0") {
-                //if printing, call get_printing_progress
-                document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = "Status: <span style='font-weight:bold;color:#75CD67;'>FINISHED</span>";
-            } else if (!document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML.includes("FINISHED") ) {
-                console.log(document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML, document.querySelector(".printer_"+printer_n+"#printing_time_left").innerHTML);
-                document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
-            } else {
-                document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
-            }
-            */
-            document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
+
+            //document.querySelector(".printer_"+printer_n+"#printing_status").innerHTML = printing_status;
             
             let printer_bed_temperature = extract_response_field(data, "bed_temperature");
             document.querySelector(".printer_"+printer_n+"#printer_bed_temperature").innerHTML = "Bed: " + printer_bed_temperature + "°C";
@@ -203,12 +206,7 @@
                 call_get_api("get_printer_name", i);
                 call_get_printing_job(i)
                 
-                //.log(document.querySelector(".printer_"+i+"#printing_time_left").innerHTML
-                //check if PRINTING in innerHTML
-                
-                
-            }
-            
+            } 
         }
         function api_call_loop() {
             //call all apis every second
@@ -230,9 +228,27 @@
             call_get_api("get_start_time", highlighthed_idx);
             call_get_camera_feed(highlighthed_idx);
         }
+        function switch_com_ultiwatcher() { 
+
+            if (document.querySelector("#ultiwatcher").hidden == false){
+                document.querySelector("#ultiwatcher").hidden = true;
+                document.querySelector("#ultiwatcher").classList.add("hidden");
+
+                document.querySelector("#com").hidden = false;
+                document.querySelector("#com").classList.remove("hidden");
+                setTimeout(switch_com_ultiwatcher, 5000);
+            } else {
+                document.querySelector("#ultiwatcher").hidden = false;
+                document.querySelector("#ultiwatcher").classList.remove("hidden");
+
+                document.querySelector("#com").hidden = true;
+                document.querySelector("#com").classList.add("hidden");
+                setTimeout(switch_com_ultiwatcher, 20000);
+            }
+        }
         api_call_loop_5000();
         api_call_loop();
-
+        switch_com_ultiwatcher();
     </script>
 </body>
 </html>

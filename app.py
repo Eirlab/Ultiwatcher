@@ -3,21 +3,15 @@ from api_call import *
 from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-#access control allow origin
-cors = CORS(app, resources={r"/call_get_current_time/*": {"origins": "*"}})
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 import datetime
 from flask import Response
 
 
 IP_LIST= ["192.168.0.120","192.168.0.111","192.168.0.119"]
-
-
-
     
 @app.route("/call_get_current_time/<printer_idx>")
-@cross_origin()
+
 def call_get_current_time(printer_idx):
     """This function will return the current time of the printer in utc"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -28,11 +22,12 @@ def call_get_current_time(printer_idx):
     current_time = current_time + datetime.timedelta(hours=2)
     #only return the time
     current_time = current_time.strftime('%H:%M')
-    return str(current_time)+"<img src='static/eirlab.png' style='margin-left:30px;' width='auto' height='80'>"
+    resp = Response(str(current_time)+"<img src='static/eirlab.png' style='margin-left:30px;' width='auto' height='80'>")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 @app.route("/call_get_printing_time_total/<printer_idx>")
-@cross_origin()
 def call_get_printing_time_total(printer_idx):
     """This function will return the estimated time to complete the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -44,7 +39,6 @@ def call_get_printing_time_total(printer_idx):
     return "Estimated print time: "+str(printing_time_total)
 
 @app.route("/call_get_printing_time_left/<printer_idx>")
-@cross_origin()
 def call_get_printing_time_left(printer_idx):
     """This function will return the estimated time left to complete the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -62,7 +56,6 @@ def call_get_printing_time_left(printer_idx):
     return "Time remaining: "+str(printing_time_left)
 
 @app.route("/call_get_printing_time_elapsed/<printer_idx>")
-@cross_origin()
 def call_get_printing_time_elapsed(printer_idx):
     """This function will return the elapsed time of the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -74,7 +67,6 @@ def call_get_printing_time_elapsed(printer_idx):
     return "Time elapsed: " +str(printing_time_elapsed)
 
 @app.route("/call_get_camera_feed/<printer_idx>")
-@cross_origin()
 def call_get_camera_feed(printer_idx):
     """This function will return the camera feed of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -82,7 +74,6 @@ def call_get_camera_feed(printer_idx):
 
 
 @app.route("/call_get_printing_progress/<printer_idx>")
-@cross_origin()
 def call_get_printing_progress(printer_idx):
     """This function will return the progress of the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -95,14 +86,12 @@ def call_get_printing_progress(printer_idx):
     return str(printing_progress)
 
 @app.route("/call_get_printer_name/<printer_idx>")
-@cross_origin()
 def call_get_printer_name(printer_idx):
     """This function will return the name of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
     return str(get_printer_name(printer_ip))
 
 @app.route("/call_get_printing_job/<printer_idx>")
-@cross_origin()
 def call_get_printing_job(printer_idx):
     """This function will return the current job of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -111,16 +100,24 @@ def call_get_printing_job(printer_idx):
     
     try:
         print_name = printing_job_body.split('"name":')[1].split(',')[0].replace('"', '')
+        print_status = printing_job_body.split('"status":')[1].split(',')[0].replace('"', '')
         print_uuid = printing_job_body.split('"uuid":')[1].split(',')[0].replace('"', '').replace('}' , '')
         print_preview = "<img src='http://"+str(printer_ip)+"/cluster-api/v1/print_jobs/"+str(print_uuid)+"/preview_image>"
+        
+        if print_status == "printing":
+            print_status = "<span style='font-weight:bold;color:#3B7CDC;'>PRINTING</span>"
+        if print_status == "wait_cleanup":
+            print_status = "<span style='font-weight:bold;color:#E77C3F;'>FINISHED</span>"
+        if print_status == "pre_print":
+            print_status = "<span style='font-weight:bold;color:#75CD67;'>PREPARING</span>"
     except:
         print_name = "No current print"
         print_preview = "<img src='https://static.thenounproject.com/png/4959299-200.png' >"
+        print_status = "<span style='font-weight:bold;color:#575757;'>READY</span>"
     #print_preview = get_print_preview(printer_ip, print_uuid)
-    return {"name": "Print name: "+ print_name, "preview": print_preview}
+    return {"name": "Print name: "+ print_name, "preview": print_preview, "status": "Status: "+print_status}
 
 @app.route("/call_get_start_time/<printer_idx>")
-@cross_origin()
 def call_get_start_time(printer_idx):
     """This function will return the start time of the print job"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -138,7 +135,6 @@ def call_get_start_time(printer_idx):
     return "Start time: "+str(start_time)
 
 @app.route("/call_get_printer_status/<printer_idx>")
-@cross_origin()
 def call_get_printer_status(printer_idx):
     """This function will return the status of the printer"""
     printer_ip = IP_LIST[int(printer_idx)]
@@ -146,8 +142,6 @@ def call_get_printer_status(printer_idx):
     printer_status = printer_status_json["status"] 
     if printer_status == "idle":
         printer_status = "<span style='font-weight:bold;color:#575757;'>READY</span>"
-    elif printer_status == "printing":
-        printer_status = "<span style='font-weight:bold;color:#3B7CDC;'>PRINTING</span>"
     printer_bed_temperature = printer_status_json["bed"]["temperature"]["current"]
     printer_head = printer_status_json["heads"][0]
     
@@ -164,9 +158,6 @@ def call_get_printer_status(printer_idx):
 
 
 @app.route("/")
-@cross_origin()
 def home():
     return render_template("index.html")
-
-
-app.run(host="0.0.0.0" , port=5000)
+    
