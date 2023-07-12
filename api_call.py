@@ -60,7 +60,7 @@ def get_print_preview(PRINTER_IP, UUID):
 def get_printer_name(PRINTER_IP):
     '''This function will return the name of the printer'''
     url = "http://"+PRINTER_IP+"/api/v1/system/variant"
-    header = {"Accept": "application/json"}
+    header = {"Accept": "application/json", "Access-Control-Allow-Origin": "*"}
     
     printer_name_request = requests.get(url, headers=header)
     
