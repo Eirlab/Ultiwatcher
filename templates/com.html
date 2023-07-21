@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //add a file selector to the page
+    var fileSelector = document.createElement('input');
+    fileSelector.setAttribute('type', 'file');
+    fileSelector.setAttribute('id', 'fileSelector')
+    document.body.appendChild(fileSelector);
+
+    //add a button to the page
+    var button = document.createElement('button');
+    button.setAttribute('id', 'button');
+    button.innerHTML = 'Upload';
+    document.body.appendChild(button);
+    //add a listener to the button
+    button.addEventListener('click', function() {
+        //call /upload with the file selector's file
+        var file = document.getElementById('fileSelector').files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert('File uploaded!');
+            } else {
+                alert('Error!');
+            }
+        };
+        xhr.send(formData);
+        
+    });
+
+</script>
+</html>

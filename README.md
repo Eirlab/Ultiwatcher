@@ -4,6 +4,8 @@ This project is a follow up to Eirlab's [ultimaker-screen](https://github.com/Ei
 
 This app's purpose is to monitor Eirlab's Ultimaker 3D printers using Ultimakers local API. It is made to run locally with Flask in order to display the printers status on a Eirlab's TV screen.
 
+![Ultiwatcher](preview.png)
+
 ## Installation
 
 ```bash
