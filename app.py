@@ -5,6 +5,7 @@ from flask import Response
 
 app = Flask(__name__)
 
+#list of all printer ips
 IP_LIST = ["192.168.0.120", "192.168.0.111", "192.168.0.119"]
 
 
