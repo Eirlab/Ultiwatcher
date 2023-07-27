@@ -137,7 +137,7 @@
             let data = await (await response).text();
             divId = api_to_call.replace("get_", "");
             document.querySelector(".printer_"+printer_n+"#"+divId).innerHTML = data;
-        }
+        }   
 
         async function update_progress_wheel(printer_n){
             //get the reponse from the server and display it

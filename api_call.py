@@ -2,6 +2,7 @@ import requests
 
 header = {"Accept": "application/json"}
 
+
 def get_printer_name(PRINTER_IP):
     """This function will return the name of the printer to the server"""
     url = "http://" + PRINTER_IP + "/api/v1/system/variant"
@@ -9,6 +10,7 @@ def get_printer_name(PRINTER_IP):
     printer_name_request = requests.get(url, headers=header)
 
     return printer_name_request.json()
+
 
 def get_printer_status(PRINTER_IP):
     """This function will return the status of the printer to the server"""
@@ -62,8 +64,8 @@ def get_printing_job(PRINTER_IP):
 
 def get_print_preview(PRINTER_IP, UUID):
     """This function will return the preview of the current job of the printer to the server"""
-    url = "http://" + PRINTER_IP + "/cluster-api/v1/print_jobs/" + UUID + "/preview_image"
+    url = (
+        "http://" + PRINTER_IP + "/cluster-api/v1/print_jobs/" + UUID + "/preview_image"
+    )
 
     return requests.get(url, headers=header).content
-
-
